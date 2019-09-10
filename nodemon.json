@@ -1,0 +1,7 @@
+{
+    "env": {
+        "MONGO_USER": "destinojet",
+        "MONGO_PASSWORD": "destinojet",
+        "MONGO_DB": "destino-jet"
+    }
+}
