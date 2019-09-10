@@ -22,15 +22,18 @@ const transformRoom = room => {
 };
 
 const transformReservation = reservation => {
+    reservation.madeBy.guests.map(guest => {
+        let guestQueryed = {...guest._doc, birthDate: new Date(guest._doc.birthDate).toISOString()}
+        console.log(guestQueryed);
+        return guestQueryed
+    })
     return {
         ...reservation._doc,
         _id: reservation.id,
         dateIn: new Date(reservation._doc.dateIn).toISOString(),
         dateOut: new Date(reservation._doc.dateOut).toISOString(),
-        madeBy : reservation._doc.madeBy.guests.map(gest => {
-            console.log(gest);
-            return gest.birthDate = new Date(gest.birthDate).toISOString()
-        })
+        hotel: hotel.bind(this, reservation._doc.hotel),
+        room: room.bind(this, reservation._doc.room)
     };
 };
 
@@ -80,9 +83,11 @@ module.exports = {
         });
     },
     reservations: () => {
-        return Reservation.find().populate('hotel').populate('room').then(reservations => {
+        return Reservation.find().then(reservations => {
             return reservations.map(reservation => {
-                return transformReservation(reservation);
+                let reservationtransformed = transformReservation(reservation);
+                console.log(reservationtransformed);
+                return reservationtransformed;
             })
         }).catch(err => {
             throw err
